@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="course_form_view" model="ir.ui.view">
+        <field name="name">course.form</field>
+        <field name="model">academy.course</field>
+        <field name="arch" type="xml">
+            <form string="Course Form">
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                        <field name="responsible_id"/>
+                    </group>
+                    <notebook>
+                        <page string="Description">
+                            <field name="description"/>
+                        </page>
+                        <page string="Sessions">
+                            <field name="session_ids">
+                                <tree string="Registered section">
+                                    <field name="name"/>
+                                    <field name="instructor_id"/>
+                                </tree>
+                            </field>
+                        </page>
+                        <page string="About">
+                            This is an example of notebooks
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- override the automatically generated list view for courses -->
+        <record model="ir.ui.view" id="course_tree_view">
+            <field name="name">course.tree</field>
+            <field name="model">academy.course</field>
+            <field name="arch" type="xml">
+                <tree string="Course Tree">
+                    <field name="name"/>
+                    <field name="description"/>
+                    <field name="responsible_id"/>
+                </tree>
+            </field>
+        </record>
+
+    <!--Windows actions-->
+    <record id="course_list_action" model="ir.actions.act_window">
+        <field name="name">Course</field>
+        <field name="res_model">academy.course</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="0_view_nocontent_smiling_face">
+                Create the first
+            </p>
+        </field>
+    </record>
+
+    <menuitem id="main_academy_menu"
+              name="Open Academy"/>
+    <menuitem id="academy_menu"
+              name="Open Academy"
+              parent="main_academy_menu"
+              />
+    <menuitem id="course_menu"
+              name="Course"
+              parent="academy_menu"
+              action="course_list_action"/>
+</odoo>
