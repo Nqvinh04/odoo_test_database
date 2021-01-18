@@ -33,20 +33,104 @@
         <field name="name">session.tree</field>
         <field name="model">academy.session</field>
         <field name="arch" type="xml">
-            <tree string="Session Tree" decoration-bf="duration&lt;5" decoration-it="duration&gt;15">
+            <tree string="Session Tree" decoration-info="duration&lt;5" decoration-danger="duration&gt;15">
+<!--            <tree string="Session Tree" decoration-info="duration&lt;5" decoration-it="duration==10" decoration-bf="duration==15"-->
+<!--                  decoration-danger="duration==20" decoration-warning="duration==25">-->
                 <field name="name"/>
-<!--                <field name="name"/>-->
+                <field name="course_id"/>
                 <field name="taken_seats" widget="progressbar"/>
                 <field name="duration" invisible="1"/>
             </tree>
         </field>
     </record>
 
+<!--    calendar view-->
+    <record id="session_calendar_view" model="ir.ui.view">
+        <field name="name">session.calendar</field>
+        <field name="model">academy.session</field>
+        <field name="arch" type="xml">
+            <calendar string="Session Calendar" date_start="start_date"
+                      date_stop="end_date" color="instructor_id">
+                <field name="name"/>
+            </calendar>
+        </field>
+    </record>
+
+    <!--Gantt view-->
+    <record id="session_gantt_view" model="ir.ui.view">
+        <field name="name">session.gantt</field>
+        <field name="model">academy.session</field>
+        <field name="arch" type="xml">
+            <gantt string="Session Gantt" date_start="start_date"
+            date_stop="end_date" color="instructor_id"/>
+        </field>
+    </record>
+
+    <!--Graph view-->
+    <record model="ir.ui.view" id="academy_session_graph_view">
+            <field name="name">academy.session.graph</field>
+            <field name="model">academy.session</field>
+            <field name="arch" type="xml">
+                <graph string="Participations by Courses">
+                    <field name="course_id"/>
+                    <field name="attendees_count" type="measure"/>
+                </graph>
+            </field>
+    </record>
+
+    <!--Pivot view-->
+    <record model="ir.ui.view" id="academy_session_pivot_view">
+            <field name="name">session.pivot</field>
+            <field name="model">academy.session</field>
+            <field name="arch" type="xml">
+                <pivot string="Participations by Courses">
+                    <field name="course_id" type="row"/>
+                    <field name="instructor_id" type="row"/>
+                    <field name="name" type="col"/>
+                    <field name="attendees_count" type="measure"/>
+                </pivot>
+            </field>
+    </record>
+
+    <!--Kanban view-->
+     <record model="ir.ui.view" id="view_academy_session_kanban">
+            <field name="name">academy.session.kanban</field>
+            <field name="model">academy.session</field>
+            <field name="arch" type="xml">
+                <kanban default_group_by="instructor_id">
+                    <field name="color"/>
+                    <templates>
+                        <t t-name="kanban-box">
+                            <div
+                                    t-attf-class="oe_kanban_color_{{kanban_getcolor(record.color.raw_value)}}
+                                                  oe_kanban_global_click_edit oe_semantic_html_override
+                                                  oe_kanban_card {{record.group_fancy==1 ? 'oe_kanban_card_fancy' : ''}}">
+                                <div t-attf-class="oe_kanban_content">
+                                    <!-- title -->
+                                    Session name:
+                                    <field name="name"/>
+                                    <br/>
+                                    Start date:
+                                    <field name="start_date"/>
+                                    <br/>
+                                    duration:
+                                    <field name="duration"/>
+                                </div>
+                            </div>
+                        </t>
+                    </templates>
+                </kanban>
+            </field>
+        </record>
+
+
+
+
 <!--    windows actions-->
     <record id="session_list_action" model="ir.actions.act_window">
         <field name="name">Session</field>
         <field name="res_model">academy.session</field>
-        <field name="view_mode">tree,form</field>
+        <field name="view_mode">tree,form,calendar,gantt,graph,pivot,kanban</field>
     </record>
 
     <menuitem id="session_menu"
@@ -54,4 +138,3 @@
               parent="academy_menu"
               action="session_list_action" />
 </odoo>
-
