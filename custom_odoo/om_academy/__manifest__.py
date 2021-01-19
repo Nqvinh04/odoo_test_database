@@ -14,15 +14,14 @@
     'website': "http://www.yourcompany.com",
     'category': 'Extra Tools',
     'version': '0.1',
-    'depends': ['base'],
+    'depends': ['base', 'mail'],
     'data': [
         'security/security.xml',
         'security/ir.model.access.csv',
         'views/academy_course.xml',
         'views/academy_session.xml',
         'views/partner.xml',
-        'wizards/wizard_view.xml',
-
+        'wizards/wizard_view.xml'
     ],
     # only loaded in demonstration mode
     'demo': [

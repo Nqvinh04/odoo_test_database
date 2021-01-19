@@ -5,17 +5,18 @@ from odoo import models, fields, api, exceptions, _
 
 class Session(models.Model):
     _name = 'academy.session'
+    _inherit = ['mail.thread', 'mail.activity.mixin']
     _description = 'Academy Session'
 
-    name = fields.Char(required=True)
+    name = fields.Char(required=True, track_visibility='always')
     start_date = fields.Date(default=fields.Date.today)
     duration = fields.Float(digits=(6,2), help="Duration in days")
     seats = fields.Integer(string="Number of seats")
     active = fields.Boolean()
     color = fields.Integer()
-    instructor_id = fields.Many2one('res.partner', string="Instructor")
+    instructor_id = fields.Many2one('res.partner', string="Instructor", track_visibility='always')
     course_id = fields.Many2one('academy.course', ondelete='cascade',
-                                string="Course", required=True)
+                                string="Course", required=True, track_visibility='always')
     attendee_ids = fields.Many2many('res.partner', string='Attendee')
     taken_seats = fields.Float(string="Taken seats", compute='_taken_seats')
     end_date = fields.Date(string="End Date", store=True,

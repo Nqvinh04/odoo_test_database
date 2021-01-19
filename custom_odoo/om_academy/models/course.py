@@ -3,13 +3,14 @@ from odoo import models, fields, api, _
 
 class Course(models.Model):
     _name = "academy.course"
+    _inherit = ['mail.thread', 'mail.activity.mixin']
     _description = "Academy Course"
 
-    name = fields.Char(string="Title", required=True)
+    name = fields.Char(string="Title", required=True, track_visibility='always')
     description = fields.Text(string="Description", required=True)
     responsible_id = fields.Many2one('res.users', ondelete='set null',
-                                     string="responsible", index=True)
-    session_ids = fields.One2many('academy.session', 'course_id', string='Session')
+                                     string="responsible", index=True, track_visibility='always')
+    session_ids = fields.One2many('academy.session', 'course_id', string='Session', track_visibility='always')
 
     def copy(self, default=None):
         default = dict(default or {})
@@ -32,3 +33,4 @@ class Course(models.Model):
          'UNIQUE(name)',
          "The course title must be unique"),
     ]
+
